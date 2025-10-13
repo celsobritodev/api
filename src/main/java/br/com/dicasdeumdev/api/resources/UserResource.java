@@ -1,5 +1,6 @@
 package br.com.dicasdeumdev.api.resources;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dicasdeumdev.api.domain.User;
+import br.com.dicasdeumdev.api.domain.dto.UserDTO;
 import br.com.dicasdeumdev.api.services.UserService;
 
 @RestController
@@ -15,13 +17,15 @@ import br.com.dicasdeumdev.api.services.UserService;
 public class UserResource {
 	
 	@Autowired
+	private ModelMapper mapper;
+	
+	@Autowired
 	private UserService service;
 	
 
 	@GetMapping("/{id}")
-	public ResponseEntity<User> findById(@PathVariable Integer id){
-	    User user = service.findById(id);
-		return ResponseEntity.ok().body(user);
+	public ResponseEntity<UserDTO> findById(@PathVariable Integer id){
+		return ResponseEntity.ok().body(mapper.map(service.findById(id), UserDTO.class));
 	}
 	
 	
