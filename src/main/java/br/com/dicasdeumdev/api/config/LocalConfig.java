@@ -28,21 +28,9 @@ public class LocalConfig implements CommandLineRunner {
         String[] activeProfiles = env.getActiveProfiles();
         System.out.println("=== PERFIS ATIVOS: " + String.join(", ", activeProfiles) + " ===");
         
-        if (env.acceptsProfiles(prof -> prof.equals("local"))) {
+        if (env.acceptsProfiles(org.springframework.core.env.Profiles.of("local"))) {
             System.out.println("=== PERFIL LOCAL DETECTADO - INICIANDO CARGA DE DADOS ===");
-            
             startDB();
-            
-            // Verifica se os usuários foram salvos
-            long countAfter = userRepository.count();
-            System.out.println("Usuários no banco DEPOIS da carga: " + countAfter);
-            
-            // Lista todos os usuários
-            List<User> users = userRepository.findAll();
-            System.out.println("=== USUÁRIOS CADASTRADOS ===");
-            users.forEach(user -> {
-                System.out.println("ID: " + user.getId() + " | Nome: " + user.getName() + " | Email: " + user.getEmail());
-            });
         } else {
             System.out.println("=== PERFIL LOCAL NÃO ESTÁ ATIVO ===");
         }
