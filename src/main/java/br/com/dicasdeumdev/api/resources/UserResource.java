@@ -1,5 +1,8 @@
 package br.com.dicasdeumdev.api.resources;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +23,7 @@ public class UserResource {
 	private ModelMapper mapper;
 	
 	@Autowired
-	private UserService service;
+	private UserService service; // Injeção de dependência do serviço
 	
 
 	@GetMapping("/{id}")
@@ -29,6 +32,12 @@ public class UserResource {
 	}
 	
 	
+	@GetMapping
+	public ResponseEntity<List<UserDTO>> findAll(){
+		List<User> list = service.findAll();
+		List<UserDTO> listDTO = list.stream().map(userObj -> mapper.map(userObj, UserDTO.class)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDTO);
+	}
 	
 
 }
