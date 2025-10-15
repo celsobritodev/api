@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,8 @@ import br.com.dicasdeumdev.api.services.UserService;
 @RequestMapping("/user")
 public class UserResource {
 	
+	private static final String ID = "/{id}";
+	
 	@Autowired
 	private ModelMapper mapper;
 	
@@ -30,7 +33,7 @@ public class UserResource {
 	private UserService service; // Injeção de dependência do serviço
 	
 
-	@GetMapping("/{id}")
+	@GetMapping(ID)
 	public ResponseEntity<UserDTO> findById(@PathVariable Integer id){
 		return ResponseEntity.ok().body(mapper.map(service.findById(id), UserDTO.class));
 	}
@@ -52,11 +55,18 @@ public class UserResource {
 		return ResponseEntity.created(uri).build();
 	}
 	
-	@PutMapping(value = "/{id}")
+	@PutMapping(value = ID)
 	public ResponseEntity<UserDTO> update(@PathVariable Integer id, @RequestBody UserDTO userDTO){
 		userDTO.setId(id);
 		return ResponseEntity.ok().body(mapper.map(service.update(userDTO), UserDTO.class));
 	}
+	
+	@DeleteMapping(value = ID)
+	public ResponseEntity<Void> delete(@PathVariable Integer id){
+		service.delete(id);
+		return ResponseEntity.noContent().build();
+	}
+	
 	
 
 }

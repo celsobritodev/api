@@ -56,6 +56,14 @@ public class UserServiceImpl implements UserService {
 		findByEmail(userDTO); // Verifica se o email já existe antes de atualizar
 		return repository.save(mapper.map(userDTO, User.class));
 	}
+
+
+	@Override
+	public void delete(Integer id)  {
+	    findById(id);
+		repository.deleteById(id);
+		
+	}
 	
 
 }
