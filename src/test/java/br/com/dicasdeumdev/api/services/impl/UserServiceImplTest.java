@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import br.com.dicasdeumdev.api.domain.User;
 import br.com.dicasdeumdev.api.domain.dto.UserDTO;
 import br.com.dicasdeumdev.api.repositories.UserRepository;
+import br.com.dicasdeumdev.api.services.exceptions.ObjectNotFoundException;
 
 @SpringBootTest
 public class UserServiceImplTest {
@@ -46,6 +47,7 @@ public class UserServiceImplTest {
 	}
 	
 	
+	// Teste para o método findById
 	@Test
 	void whenFindByIdThenReturnAnUserInstance() {
 		// Quando o método findById do repositório for chamado com qualquer inteiro, retorne o optionalUser
@@ -59,6 +61,21 @@ public class UserServiceImplTest {
 		Assertions.assertEquals(ID, user.getId()); // verifica se o id do objeto é igual ao id esperado
 		Assertions.assertEquals(NAME, user.getName()); // verifica se o nome do objeto é igual ao nome esperado
 		Assertions.assertEquals(EMAIL, user.getEmail()); // verifica se o email do objeto é igual ao email esperado
+		
+	}
+	
+	// Teste para o método findById quando o usuário não é encontrado
+	@Test
+	void whenFindByIdThenReturnAnObjectNotFoundException() {
+		Mockito.when(repository.findById(Mockito.anyInt()))
+			.thenThrow(new ObjectNotFoundException("Objeto não encontrado!"));
+		try {
+			service.findById(ID);
+		} catch (Exception ex) {
+			Assertions.assertEquals(ObjectNotFoundException.class, ex.getClass());
+			Assertions.assertEquals("Objeto não encontrado!", ex.getMessage());
+		
+		}
 		
 	}
 	
