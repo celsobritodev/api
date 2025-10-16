@@ -24,7 +24,7 @@ public class UserServiceImplTest {
 	
 	private static final String EMAIL_JÁ_CADASTRADO_NO_SISTEMA = "Email já cadastrado no sistema!";
 	private static final int INDEX = 0;
-	private static final String OBJETO_NÃO_ENCONTRADO = "Objeto não encontrado!";
+	private static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado!";
 	private static final Integer ID = 1;
 	private static final String PASSWORD = "123";
 	private static final String EMAIL = "helder@gmail.com";
@@ -73,12 +73,12 @@ public class UserServiceImplTest {
 	@Test
 	void whenFindByIdThenReturnAnObjectNotFoundException() {
 		Mockito.when(repository.findById(Mockito.anyInt()))
-			.thenThrow(new ObjectNotFoundException(OBJETO_NÃO_ENCONTRADO));
+			.thenThrow(new ObjectNotFoundException(OBJETO_NAO_ENCONTRADO));
 		try {
 			service.findById(ID);
 		} catch (Exception ex) {
 			Assertions.assertEquals(ObjectNotFoundException.class, ex.getClass());
-			Assertions.assertEquals(OBJETO_NÃO_ENCONTRADO, ex.getMessage());
+			Assertions.assertEquals(OBJETO_NAO_ENCONTRADO, ex.getMessage());
 		
 		}
 		
@@ -168,6 +168,31 @@ public class UserServiceImplTest {
 		}
 		
 		
+		
+	}
+	
+	
+	@Test
+	void whenDeleteThenReturnSuccess() {
+		Mockito.when(repository.findById(Mockito.anyInt())).thenReturn(optionalUser);
+		// doNothing() é usado para métodos void, quando o método deleteById for chamado com qualquer inteiro, não faça nada
+		Mockito.doNothing().when(repository).deleteById(Mockito.anyInt());
+		service.delete(ID);
+		// verifica se o método deleteById foi chamado exatamente uma vez com qualquer inteiro
+		Mockito.verify(repository, Mockito.times(1)).deleteById(Mockito.anyInt());
+	}
+	
+	@Test
+	void whenDeleteThenReturnAnObjectNotFoundException() {
+		Mockito.when(repository.findById(Mockito.anyInt()))
+			.thenThrow(new ObjectNotFoundException(OBJETO_NAO_ENCONTRADO));
+		try {
+			service.delete(ID);
+		} catch (Exception ex) {
+			Assertions.assertEquals(ObjectNotFoundException.class, ex.getClass());
+			Assertions.assertEquals(OBJETO_NAO_ENCONTRADO, ex.getMessage());
+		
+		}
 		
 	}
 	
