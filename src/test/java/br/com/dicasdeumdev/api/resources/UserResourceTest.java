@@ -1,5 +1,7 @@
 package br.com.dicasdeumdev.api.resources;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -11,6 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import br.com.dicasdeumdev.api.domain.User;
@@ -70,6 +73,48 @@ public class UserResourceTest {
 		Assertions.assertEquals(PASSWORD, response.getBody().getPassword());
 	}
 	
+	
+	
+	@Test
+	void whenFindAllThenReturnAListOfUserDTO() {
+		
+		// Simula o comportamento do método findAll do serviço para retornar uma lista com o usuário criado
+		Mockito.when(userService.findAll()).thenReturn(List.of(user));
+				
+		Mockito.when(modelMapper.map(Mockito.any(), Mockito.any())).thenReturn(userDTO);
+		
+		ResponseEntity<List<UserDTO>> response = userResource.findAll();
+		
+		Assertions.assertNotNull(response);
+		Assertions.assertNotNull(response.getBody());
+		Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+		Assertions.assertEquals(ResponseEntity.class, response.getClass());
+		Assertions.assertEquals(ArrayList.class, response.getBody().getClass());
+		
+		// Verifica se a lista retornada tem o tamanho esperado
+		Assertions.assertEquals(1, response.getBody().size());
+		// Verifica se o primeiro elemento da lista é do tipo UserDTO
+		Assertions.assertEquals(UserDTO.class, response.getBody().get(INDEX).getClass());
+		
+		
+		Assertions.assertEquals(ID, response.getBody().get(INDEX).getId());
+		Assertions.assertEquals(NAME, response.getBody().get(INDEX).getName());
+		Assertions.assertEquals(EMAIL, response.getBody().get(INDEX).getEmail());
+		Assertions.assertEquals(PASSWORD, response.getBody().get(INDEX).getPassword());
+	}
+	
+	
+	@Test
+	void whenCreateThenReturnCreated() {
+		Mockito.when(userService.create(Mockito.any())).thenReturn(user);
+		
+		ResponseEntity<UserDTO> response = userResource.create(userDTO);
+		
+		Assertions.assertNotNull(response);
+		Assertions.assertEquals(ResponseEntity.class, response.getClass());
+		Assertions.assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		Assertions.assertNotNull(response.getHeaders().get("Location"));
+	}
 	
 	
 	
