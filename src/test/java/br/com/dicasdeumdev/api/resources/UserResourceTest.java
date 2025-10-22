@@ -117,6 +117,42 @@ public class UserResourceTest {
 	}
 	
 	
+	@Test
+	void whenUpdateThenReturnSuccess() {
+		Mockito.when(userService.update(userDTO)).thenReturn(user);
+		Mockito.when(modelMapper.map(Mockito.any(), Mockito.any())).thenReturn(userDTO);
+		
+		ResponseEntity<UserDTO> response = userResource.update(ID, userDTO);
+		
+		Assertions.assertNotNull(response);
+		Assertions.assertNotNull(response.getBody());
+		Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+		Assertions.assertEquals(ResponseEntity.class, response.getClass());
+		Assertions.assertEquals(UserDTO.class, response.getBody().getClass());
+		
+		
+		
+		Assertions.assertEquals(ID, response.getBody().getId());
+		Assertions.assertEquals(NAME, response.getBody().getName());
+		Assertions.assertEquals(EMAIL, response.getBody().getEmail());
+		Assertions.assertEquals(PASSWORD, response.getBody().getPassword());
+		}
+	
+	
+	@Test
+	void whenDeleteThenReturnSuccess() {
+		Mockito.doNothing().when(userService).delete(Mockito.anyInt());
+		
+		ResponseEntity<UserDTO> response = userResource.delete(ID);
+		
+		Assertions.assertNotNull(response);
+		Assertions.assertEquals(ResponseEntity.class, response.getClass());
+		Assertions.assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+		
+		Mockito.verify(userService, Mockito.times(1)).delete(Mockito.anyInt());
+	}
+	
+	
 	
 	private void startUser() {
 		user = new User(ID, NAME, EMAIL, PASSWORD);
