@@ -2,8 +2,6 @@ package br.com.dicasdeumdev.api.resources;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,9 +22,7 @@ import br.com.dicasdeumdev.api.services.impl.UserServiceImpl;
 public class UserResourceTest {
 	
 	
-	private static final String EMAIL_JÁ_CADASTRADO_NO_SISTEMA = "Email já cadastrado no sistema!";
 	private static final int INDEX = 0;
-	private static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado!";
 	private static final Integer ID = 1;
 	private static final String PASSWORD = "123";
 	private static final String EMAIL = "helder@gmail.com";
