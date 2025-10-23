@@ -15,6 +15,9 @@ import org.springframework.context.ConfigurableApplicationContext;
 // Para poder usar o application-local.properties tive que fazer o seguinte:
 // Run Configurations -> Edit Configurations -> VM options: -Dspring.profiles.active=local
 
+// NAO DEU PRA SUBIR NO HEROKU PORQUE NÃO TEM PLANO FREE MAIS
+// https://youtu.be/pZUwkHUGhGw?list=PLA8Qj9w4RGkWgyYa485pgf-VAoJgL4rW1
+
 @SpringBootApplication
 public class ApiApplication {
 
